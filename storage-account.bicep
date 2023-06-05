@@ -1,6 +1,16 @@
 param accountName string
 
-var realAccountName = '${accountName} 1234'
+var fullAccountName = '${accountName} + ${uniqueString(resourceGroup().id)}'
+var location = resourceGroup().location
 
-output accountName string = realAccountName
+resource myStorageAccount 'Microsoft.Storage/storageAccounts@2022-09-01'={
 
+  name: fullAccountName
+  kind:'StorageV2'
+  location: location
+  sku:{
+    name:'Standard_LRS'
+  }
+
+}
+output storageAccount string = myStorageAccount.name
